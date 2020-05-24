@@ -519,7 +519,9 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
 
         // Gets the current system time in milliseconds
         Long now = Long.valueOf(System.currentTimeMillis());
-
+//        Date date = new Date(now);
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+//        String dateTime = format.format(date);
         // If the values map doesn't contain the creation date, sets the value to the current time.
         if (values.containsKey(NotePad.Notes.COLUMN_NAME_CREATE_DATE) == false) {
             values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
