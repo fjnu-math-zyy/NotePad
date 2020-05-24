@@ -1,7 +1,23 @@
 [
     {
+        "merged": "E:\\GameDownload\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\noteslist_item.xml",
+        "source": "E:\\GameDownload\\NotePad\\app\\src\\main\\res\\layout\\noteslist_item.xml"
+    },
+    {
+        "merged": "E:\\GameDownload\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\note_search_list.xml",
+        "source": "E:\\GameDownload\\NotePad\\app\\src\\main\\res\\layout\\note_search_list.xml"
+    },
+    {
+        "merged": "E:\\GameDownload\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\note_editor.xml",
+        "source": "E:\\GameDownload\\NotePad\\app\\src\\main\\res\\layout\\note_editor.xml"
+    },
+    {
         "merged": "E:\\gitrepos\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\title_editor.xml",
         "source": "E:\\gitrepos\\NotePad\\app\\src\\main\\res\\layout\\title_editor.xml"
+    },
+    {
+        "merged": "E:\\GameDownload\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\title_editor.xml",
+        "source": "E:\\GameDownload\\NotePad\\app\\src\\main\\res\\layout\\title_editor.xml"
     },
     {
         "merged": "E:\\gitrepos\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\layout\\noteslist_item.xml",

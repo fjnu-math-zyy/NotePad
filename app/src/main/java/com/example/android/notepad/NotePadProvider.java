@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -539,6 +541,7 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
         if (values.containsKey(NotePad.Notes.COLUMN_NAME_NOTE) == false) {
             values.put(NotePad.Notes.COLUMN_NAME_NOTE, "");
         }
+
 
         // Opens the database object in "write" mode.
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();

@@ -38,6 +38,10 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Displays a list of notes. Will display notes from the {@link Uri}
@@ -60,6 +64,7 @@ public class NotesList extends ListActivity {
     private static final String[] PROJECTION = new String[] {
             NotePad.Notes._ID, // 0
             NotePad.Notes.COLUMN_NAME_TITLE, // 1
+            NotePad.Notes.COLUMN_NAME_CREATE_DATE
     };
 
     /** The index of the title column */
@@ -117,11 +122,11 @@ public class NotesList extends ListActivity {
          */
 
         // The names of the cursor columns to display in the view, initialized to the title column
-        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE } ;
+        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,NotePad.Notes.COLUMN_NAME_CREATE_DATE} ;
 
         // The view IDs that will display the cursor columns, initialized to the TextView in
         // noteslist_item.xml
-        int[] viewIDs = { android.R.id.text1 };
+        int[] viewIDs = { android.R.id.text1, R.id.text1_time };
 
         // Creates the backing adapter for the ListView.
         SimpleCursorAdapter adapter
@@ -132,7 +137,21 @@ public class NotesList extends ListActivity {
                       dataColumns,
                       viewIDs
               );
-
+        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if( columnIndex == 2 ){
+                    TextView time = (TextView) view;
+                    Calendar c = Calendar.getInstance();
+                    long millions = cursor.getLong(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_CREATE_DATE));
+                    c.setTimeInMillis(millions);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    time.setText(sdf.format(c.getTime()));
+                    return true;
+                }
+                return false;
+            }
+        });
         // Sets the ListView's adapter to be the cursor adapter that was just created.
         setListAdapter(adapter);
     }
@@ -263,25 +282,30 @@ public class NotesList extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_add:
-          /*
-           * Launches a new Activity using an Intent. The intent filter for the Activity
-           * has to have action ACTION_INSERT. No category is set, so DEFAULT is assumed.
-           * In effect, this starts the NoteEditor Activity in NotePad.
-           */
-           startActivity(new Intent(Intent.ACTION_INSERT, getIntent().getData()));
-           return true;
-        case R.id.menu_paste:
-          /*
-           * Launches a new Activity using an Intent. The intent filter for the Activity
-           * has to have action ACTION_PASTE. No category is set, so DEFAULT is assumed.
-           * In effect, this starts the NoteEditor Activity in NotePad.
-           */
-          startActivity(new Intent(Intent.ACTION_PASTE, getIntent().getData()));
-          return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
+            case R.id.menu_search:
+                Intent intent = new Intent();
+                intent.setClass(NotesList.this,NoteSearch.class);
+                NotesList.this.startActivity(intent);
+                return true;
+            case R.id.menu_add:
+              /*
+               * Launches a new Activity using an Intent. The intent filter for the Activity
+               * has to have action ACTION_INSERT. No category is set, so DEFAULT is assumed.
+               * In effect, this starts the NoteEditor Activity in NotePad.
+               */
+               startActivity(new Intent(Intent.ACTION_INSERT, getIntent().getData()));
+               return true;
+            case R.id.menu_paste:
+              /*
+               * Launches a new Activity using an Intent. The intent filter for the Activity
+               * has to have action ACTION_PASTE. No category is set, so DEFAULT is assumed.
+               * In effect, this starts the NoteEditor Activity in NotePad.
+               */
+              startActivity(new Intent(Intent.ACTION_PASTE, getIntent().getData()));
+              return true;
+            default:
+                return super.onOptionsItemSelected(item);
+            }
     }
 
     /**

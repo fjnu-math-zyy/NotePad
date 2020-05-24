@@ -40,7 +40,8 @@
 
         <activity
             android:name="com.example.android.notepad.NotesList"
-            android:label="@string/title_notes_list" >
+            android:label="@string/title_notes_list"
+            android:theme="@android:style/Theme.Holo.Light" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -144,6 +145,11 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.android.notepad.NoteSearch"
+            android:label="NotSearch"
+            android:theme="@android:style/Theme.Holo.Light" >
         </activity>
     </application>
 
