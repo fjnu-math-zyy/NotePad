@@ -519,18 +519,18 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
 
         // Gets the current system time in milliseconds
         Long now = Long.valueOf(System.currentTimeMillis());
-//        Date date = new Date(now);
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-//        String dateTime = format.format(date);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        String dateTime = format.format(now);
         // If the values map doesn't contain the creation date, sets the value to the current time.
         if (values.containsKey(NotePad.Notes.COLUMN_NAME_CREATE_DATE) == false) {
-            values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
+            values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, dateTime);
         }
 
         // If the values map doesn't contain the modification date, sets the value to the current
         // time.
         if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
-            values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
+            values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateTime);
         }
 
         // If the values map doesn't contain a title, sets the value to the default title.
@@ -677,6 +677,22 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         int count;
         String finalWhere;
+
+        // Gets the current system time in milliseconds
+        Long now = Long.valueOf(System.currentTimeMillis());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        String dateTime = format.format(now);
+        // If the values map doesn't contain the creation date, sets the value to the current time.
+        if (values.containsKey(NotePad.Notes.COLUMN_NAME_CREATE_DATE) == false) {
+            values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, dateTime);
+        }
+
+        // If the values map doesn't contain the modification date, sets the value to the current
+        // time.
+        if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
+            values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateTime);
+        }
 
         // Does the update based on the incoming URI pattern
         switch (sUriMatcher.match(uri)) {

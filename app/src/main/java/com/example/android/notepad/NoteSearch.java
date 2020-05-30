@@ -16,7 +16,7 @@ public class NoteSearch extends ListActivity  implements SearchView.OnQueryTextL
             NotePad.Notes._ID, // 0
             NotePad.Notes.COLUMN_NAME_TITLE, // 1
             //扩展 显示时间 颜色
-            NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, // 2
+            NotePad.Notes.COLUMN_NAME_CREATE_DATE, // 2
 
     };
     @Override
@@ -46,7 +46,7 @@ public class NoteSearch extends ListActivity  implements SearchView.OnQueryTextL
                 selectionArgs,                    // 条件右边
                 NotePad.Notes.DEFAULT_SORT_ORDER  // Use the default sort order.
         );
-        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE ,  NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE ,  NotePad.Notes.COLUMN_NAME_CREATE_DATE };
         int[] viewIDs = { android.R.id.text1 , R.id.text1_time };
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 this,

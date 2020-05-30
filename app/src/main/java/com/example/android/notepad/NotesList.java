@@ -137,21 +137,21 @@ public class NotesList extends ListActivity {
                       dataColumns,
                       viewIDs
               );
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                if( columnIndex == 2 ){
-                    TextView time = (TextView) view;
-                    Calendar c = Calendar.getInstance();
-                    long millions = cursor.getLong(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_CREATE_DATE));
-                    c.setTimeInMillis(millions);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    time.setText(sdf.format(c.getTime()));
-                    return true;
-                }
-                return false;
-            }
-        });
+//        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+//            @Override
+//            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+//                if( columnIndex == 2 ){
+//                    TextView time = (TextView) view;
+//                    Calendar c = Calendar.getInstance();
+//                    long millions = cursor.getLong(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_CREATE_DATE));
+//                    c.setTimeInMillis(millions);
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    time.setText(sdf.format(c.getTime()));
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
         // Sets the ListView's adapter to be the cursor adapter that was just created.
         setListAdapter(adapter);
     }
