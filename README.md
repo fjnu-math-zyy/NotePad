@@ -194,15 +194,157 @@ if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
 ```
 * 9.这样在修改时，时间也会同步更新了
 
-**选择第一条笔记**
+* **选择第一条笔记**
 
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time.jpg)
-**随便添加一条信息，点击保存**
+
+* **随便添加一条信息，点击保存**
 
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time2.jpg)
-**时间同步修改了**
+
+* **时间同步修改了**
 
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time3.jpg)
 ## 添加笔记查询功能
+* 1.要添加笔记查询功能，就要在应用中增加一个搜索的入口。找到菜单的xml文件，list_options_menu.xml，添加一个搜索的item，搜索图标用安卓自带的图标，设为总是显示：
+```
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  This is our one standard application action (creating a new note). -->
+    <item android:id="@+id/menu_add"
+          android:icon="@drawable/ic_menu_compose"
+          android:title="@string/menu_add"
+          android:alphabeticShortcut='a'
+          android:showAsAction="always" />
+    <!--  If there is currently data in the clipboard, this adds a PASTE menu item to the menu
+          so that the user can paste in the data.. -->
+    <item android:id="@+id/menu_paste"
+          android:icon="@drawable/ic_menu_compose"
+          android:title="@string/menu_paste"
+          android:alphabeticShortcut='p' />
+    <item
+        android:id="@+id/menu_search"
+        android:title="@string/menu_search"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:showAsAction="always">
+
+    </item>
+</menu>
+```
+* 2.在NoteList中找到onOptionsItemSelected方法，在switch中添加搜索的case语句:
+```
+case R.id.menu_search:
+                Intent intent = new Intent();
+                intent.setClass(NotesList.this,NoteSearch.class);
+                NotesList.this.startActivity(intent);
+                return true;
+```
+* 3.在case语句中写跳转activity代码之前要先写好搜索的activity，新建一个名为NoteSearch的activity。由于搜索出来的也是笔记列表，所以可以模仿NoteList的activity继承ListActivity。在安卓中有个用于搜索控件：SearchView，可以把SearchView跟ListView相结合，动态地显示搜索结果。先布局搜索页面，在layout中新建布局文件note_search_list.xml：
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="输入搜索内容..."
+        android:layout_alignParentTop="true">
+    </SearchView>
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+</LinearLayout>
+```
+* 4.在上面的ListView的id命名方式与往常“@+id/”的方式有些不同，之前用“@+id/”方式尝试过，但是运行会出错，可能是由于是继承ListAcitivity的缘故。
+要动态地显示搜索结果，就要对SearchView文本变化设置监听，NoteSearch除了要继承ListView外还要实现SearchView.OnQueryTextListener接口：
+```
+public class NoteSearch extends ListActivity  implements SearchView.OnQueryTextListener {
+    private static final String[] PROJECTION = new String[] {
+            NotePad.Notes._ID, // 0
+            NotePad.Notes.COLUMN_NAME_TITLE, // 1
+            //扩展 显示时间 颜色
+            NotePad.Notes.COLUMN_NAME_CREATE_DATE, // 2
+
+    };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.note_search_list);
+        Intent intent = getIntent();
+        if (intent.getData() == null) {
+            intent.setData(NotePad.Notes.CONTENT_URI);
+        }
+        SearchView searchview = (SearchView)findViewById(R.id.search_view);
+        //为查询文本框注册监听器
+        searchview.setOnQueryTextListener(NoteSearch.this);
+    }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String selection = NotePad.Notes.COLUMN_NAME_TITLE + " Like ? ";
+        String[] selectionArgs = { "%"+newText+"%" };
+        Cursor cursor = managedQuery(
+                getIntent().getData(),            // Use the default content URI for the provider.
+                PROJECTION,                       // Return the note ID and title for each note. and modifcation date
+                selection,                        // 条件左边
+                selectionArgs,                    // 条件右边
+                NotePad.Notes.DEFAULT_SORT_ORDER  // Use the default sort order.
+        );
+        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE ,  NotePad.Notes.COLUMN_NAME_CREATE_DATE };
+        int[] viewIDs = { android.R.id.text1 , R.id.text1_time };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                this,
+                R.layout.noteslist_item,
+                cursor,
+                dataColumns,
+                viewIDs
+        );
+        setListAdapter(adapter);
+        return true;
+    }
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        // Constructs a new URI from the incoming URI and the row ID
+        Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
+        // Gets the action from the incoming Intent
+        String action = getIntent().getAction();
+        // Handles requests for note data
+        if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_GET_CONTENT.equals(action)) {
+            // Sets the result to return to the component that called this Activity. The
+            // result contains the new URI
+            setResult(RESULT_OK, new Intent().setData(uri));
+        } else {
+            // Sends out an Intent to start an Activity that can handle ACTION_EDIT. The
+            // Intent's data is the note ID URI. The effect is to call NoteEdit.
+            startActivity(new Intent(Intent.ACTION_EDIT, uri));
+        }
+    }
+}
+```
+* 5.动态搜索的实现最主要的部分在onQueryTextChange方法中，在使用这个方法，要先为SearchView注册监听：
+```
+SearchView searchview = (SearchView)findViewById(R.id.search_view);
+        //为查询文本框注册监听器
+        searchview.setOnQueryTextListener(NoteSearch.this);
+```
+* 6.而onQueryTextChange方法作用是，当SearchView中文本发生变化时，执行其中代码，搜索还有一个重要的部分就是要做到模糊匹配而不是严格匹配，可以使用数据库查询语句中的LIKE和%结合来实现，newText为输入搜索的内容：
+```
+String[] selectionArgs = { "%"+newText+"%" };
+```
+* 7.最后要在AndroidManifest.xml注册NoteSearch：
+```
+<activity android:name=".NoteSearch"
+                android:label="NotSearch"
+            </activity>
+```
+* 8.这样就可以实现动态搜索功能:
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/search_1.jpg)
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/search_2.jpg)
