@@ -4,26 +4,26 @@ This is an AndroidStudio rebuild of google SDK sample NotePad
 
 ## NoteList中显示条目增加时间戳显示
 **因为NotePad自带有显示时间功能，所以只需要稍加修改就能实现**
-* 1. 首先找到NotePadProvider这个类,在类中定位到insert这个方法
+* 1.首先找到NotePadProvider这个类,在类中定位到insert这个方法
 ```
 @Override
 public Uri insert(Uri uri, ContentValues initialValues) {
       ...
     }
 ```
-* 2. 可以看到这里insert方法中使用了System.currentTimeMillis()方法将获取到的时间保存到now中
+* 2.可以看到这里insert方法中使用了System.currentTimeMillis()方法将获取到的时间保存到now中
 ```
 // Gets the current system time in milliseconds
 Long now = Long.valueOf(System.currentTimeMillis());
 ```
-* 3. 但是这样获取到的只是1970年到现在的秒数，所以我们要对其进行格式转换处理转换为我们看得懂的时间格式
+* 3.但是这样获取到的只是1970年到现在的秒数，所以我们要对其进行格式转换处理转换为我们看得懂的时间格式
 ```
  // Gets the current system time in milliseconds
 Long now = Long.valueOf(System.currentTimeMillis());
 SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 String dateTime = format.format(now);
 ```
-* 4. 别忘了将下面的所有使用到now的地方改为dataTime
+* 4.别忘了将下面的所有使用到now的地方改为dataTime
 ```
  // Gets the current system time in milliseconds
 Long now = Long.valueOf(System.currentTimeMillis());
@@ -41,7 +41,7 @@ if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
     values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateTime);
 }
 ```
-* 5. 因为notelslist_item中只带有一个显示文本的TextView,所以要添加一个显示时间的TextView
+* 5.因为notelslist_item中只带有一个显示文本的TextView,所以要添加一个显示时间的TextView
 ```
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
@@ -67,7 +67,8 @@ if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
         android:textColor="@color/black"/>
 </LinearLayout>
 ```
-* 6. 再到NoteList类中添加一些参数即可
+* 6.再到NoteList类中添加一些参数即可
+
 **在PROJECTION中添加NotePad.Notes.COLUMN_NAME_CREATE_DATE**
 ```
 private static final String[] PROJECTION = new String[] {
@@ -87,7 +88,7 @@ String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,NotePad.Notes.COLUMN_NA
 // noteslist_item.xml
 int[] viewIDs = { android.R.id.text1, R.id.text1_time };
 ```
-* 7. 现在可以显示创建时间了
+* 7.现在可以显示创建时间了
 
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/time.jpg)
 ## 添加笔记查询功能
