@@ -346,5 +346,6 @@ String[] selectionArgs = { "%"+newText+"%" };
             </activity>
 ```
 * 8.这样就可以实现动态搜索功能:
+
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/search_1.jpg)
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/search_2.jpg)
