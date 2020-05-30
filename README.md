@@ -92,6 +92,7 @@ int[] viewIDs = { android.R.id.text1, R.id.text1_time };
 
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/time.jpg)
 * 8.虽然时间可以正常显示，但是对笔记做出修改时，时间无法正常更新，依然显示的是创建时的时间，所以我们如果想要修改笔记后时间也同步更新的话，只需要做如下更改即可
+
 **在NotePadProvider这个类中定位到update这个方法,并且加入以下内容即可**
 ```
  // Gets the current system time in milliseconds
@@ -193,8 +194,14 @@ if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
 ```
 * 9.这样在修改时，时间也会同步更新了
 
+**选择第一条笔记**
+
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time.jpg)
+**随便添加一条信息，点击保存**
+
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time2.jpg)
+**时间同步修改了**
+
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/change_time3.jpg)
 ## 添加笔记查询功能
 ![Image text](https://raw.githubusercontent.com/fjnu-math-zyy/NotePad/master/img-folder/search_1.jpg)
